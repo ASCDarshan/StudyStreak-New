@@ -1,8 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  Search,
-  User,
-  MoreHorizontal,
   ChevronLeft,
   ChevronRight,
   Star,
@@ -13,25 +10,18 @@ import {
   GraduationCap,
   Mic2Icon,
   Laptop2Icon,
-  ExpandIcon,
-  TestTube2Icon,
   PenBoxIcon,
 } from "lucide-react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import TestimonialSection from "./TestimonialSection";
-import { Link } from "react-router-dom";
+import TestimonialSection from "./Testimonial/TestimonialSection";
+import { Link, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-  // const navigationItems = [
-  //     { name: 'Home', path: '/' },
-  //     { name: 'Courses', path: '/courses' },
-  //     { name: 'About Us', path: '/about-us' },
-  //     { name: 'Why Choose Us', path: '/why-choose-us' },
-  //     { name: 'Blogs', path: '/blogs' },
-  //     { name: 'Talk to Us', path: '/talk-to-us' },
-  //     { name: 'Become a Partner', path: '/become-a-partner' },
-  //   ];
+  const navigate = useNavigate();
+  const handleExplorecourses = () => {
+    navigate("/courses");
+  };
   const features = [
     {
       title: "All Major Test Preparations",
@@ -86,6 +76,8 @@ const HomePage = () => {
       rating: 4.9,
       reviews: 12500,
       instructor: "Dr. Emma Watson",
+      image:
+        "http://localhost:3001/static/media/course.519b3df106ae19415253.jpg",
     },
     {
       id: 2,
@@ -126,6 +118,8 @@ const HomePage = () => {
       icon: "pte",
       duration: "4 weeks",
       level: "All Levels",
+      image:
+        "http://localhost:3001/static/media/course.519b3df106ae19415253.jpg",
     },
     {
       id: 6,
@@ -147,30 +141,6 @@ const HomePage = () => {
       icon: "pte-reading",
       duration: "2 weeks",
       level: "Beginner",
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: "John Doe",
-      exam: "IELTS",
-      score: "8.5",
-      quote:
-        "STUDYSTREAK helped me achieve my dream score in IELTS. The instructors were fantastic!",
-    },
-    {
-      name: "Jane Smith",
-      exam: "GRE",
-      score: "335",
-      quote:
-        "I couldn't have scored so high on the GRE without STUDYSTREAK's comprehensive program.",
-    },
-    {
-      name: "Alex Johnson",
-      exam: "GMAT",
-      score: "760",
-      quote:
-        "The GMAT course was intense but extremely effective. Highly recommended!",
     },
   ];
 
@@ -211,15 +181,14 @@ const HomePage = () => {
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="w-full md:w-1/2 space-y-6">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                Ace Your Exams with
-                <span className="text-accent-300"> STUDYSTREAK</span>
+                Achieve your dream of overseas Education with ESPI.
               </h1>
               <p className="text-primary-100 text-lg">
-                Expert-led courses for IELTS, GRE, GMAT, TOEFL, and PTE.
-                Designed for ambitious students aiming for top scores.
+                Focuses courses to develop your potential to score high.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
+                  onClick={handleExplorecourses}
                   className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
                   shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                 >
@@ -234,32 +203,12 @@ const HomePage = () => {
               </div>
             </div>
             <div className="w-full md:w-1/2 relative mt-8 md:mt-0">
-              <div className="relative rounded-2xl overflow-hidden shadow-elevated transform hover:scale-[1.02] transition-all duration-500">
+              <div className="w-full md:w-1/2 relative">
                 <img
-                  src="/api/placeholder/600/400"
+                  src="https://studystreak.in/static/media/about_10.c6fba820cc5e8886a5dd.png"
                   alt="Students studying"
-                  className="w-full"
+                  className="rounded-2xl shadow-soft"
                 />
-                <div className="absolute inset-0 bg-primary-900/20 backdrop-blur-sm"></div>
-              </div>
-              {/* Floating Achievement Card */}
-              <div
-                className="absolute -left-4 top-1/4 bg-white p-4 rounded-xl shadow-elevated 
-                transform hover:-translate-y-1 transition-all duration-300 hidden md:block"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="bg-success-100 p-2 rounded-lg">
-                    <Star className="text-success-500" size={20} />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-neutral-800">
-                      95% Success Rate
-                    </div>
-                    <div className="text-xs text-neutral-500">
-                      Last 12 months
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -337,9 +286,7 @@ const HomePage = () => {
             {examCourses.map((course, index) => (
               <div
                 key={index}
-                className="group bg-white rounded-xl overflow-hidden border border-neutral-200
-                shadow-card hover:shadow-card-hover hover:border-primary-200
-                transition-all duration-300 transform hover:-translate-y-1"
+                className="group bg-white rounded-xl overflow-hidden border border-neutral-200 shadow-card hover:shadow-card-hover hover:border-primary-200 transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div
                   className={`h-48 relative overflow-hidden ${
@@ -353,18 +300,14 @@ const HomePage = () => {
                 >
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
                   <img
-                    src={`/${course.icon}-icon.svg`}
+                    src={`${course.image}`}
                     alt={course.title}
-                    className="w-16 h-16 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-                    group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-full object-cover absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:scale-110 transition-transform duration-300"
                   />
                 </div>
 
                 <div className="p-6">
-                  <h3
-                    className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 
-                    transition-colors duration-300"
-                  >
+                  <h3 className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 transition-colors duration-300">
                     {course.title}
                   </h3>
                   <div className="flex items-center text-sm text-neutral-600 mb-3">
@@ -398,7 +341,7 @@ const HomePage = () => {
 
                   <div className="flex items-center mb-4 pt-3 border-t border-neutral-100">
                     <img
-                      src={`/instructor-${index + 1}.jpg`}
+                      src={`https://media.istockphoto.com/id/1327592506/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=BpR0FVaEa5F24GIw7K8nMWiiGmbb8qmhfkpXcp1dhQg=`}
                       alt={course.instructor}
                       className="w-8 h-8 rounded-full border-2 border-white shadow-soft"
                     />
@@ -409,8 +352,7 @@ const HomePage = () => {
 
                   <Link
                     to={`/course/${course.id}`}
-                    className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl
-                    hover:bg-primary-100 transition-colors duration-300 font-medium"
+                    className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-medium"
                   >
                     View Details
                   </Link>
@@ -420,8 +362,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
-      {/* Continue with Part 2... */}
 
       {/* PTE Courses Section */}
       <section className="py-12 md:py-16 bg-neutral-100">
@@ -484,10 +424,9 @@ const HomePage = () => {
                   >
                     <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
                     <img
-                      src={`/${course.icon}-icon.svg`}
+                      src={`${course.image}`}
                       alt={course.title}
-                      className="w-16 h-16 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-                      group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-full object-cover absolute top-0 left-0 group-hover:scale-110 transition-transform duration-300"
                     />
                   </div>
 
@@ -601,7 +540,7 @@ const HomePage = () => {
           </h2>
           <p className="text-lg text-primary-100 mb-8 max-w-2xl mx-auto">
             Join thousands of students who have achieved their dream scores with
-            STUDYSTREAK.
+            StudyStreak.
           </p>
           <button
             className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
@@ -612,89 +551,6 @@ const HomePage = () => {
           </button>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-neutral-900 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">About STUDYSTREAK</h3>
-              <p className="text-neutral-400 leading-relaxed">
-                Empowering students worldwide to achieve their academic goals
-                through expert-led courses and innovative learning techniques.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Exams We Cover</h3>
-              <ul className="space-y-2">
-                {["IELTS", "GRE", "GMAT", "TOEFL", "PTE Academic"].map(
-                  (exam, index) => (
-                    <li key={index}>
-                      <Link
-                        to={`/courses/${exam.toLowerCase()}`}
-                        className="text-neutral-400 hover:text-white transition-colors duration-300"
-                      >
-                        {exam}
-                      </Link>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                {[
-                  ["Home", "/"],
-                  ["Courses", "/courses"],
-                  ["About Us", "/about-us"],
-                  ["Contact", "/contact"],
-                  ["Blog", "/blog"],
-                ].map(([name, path], index) => (
-                  <li key={index}>
-                    <Link
-                      to={path}
-                      className="text-neutral-400 hover:text-white transition-colors duration-300"
-                    >
-                      {name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">Contact Us</h3>
-              <div className="space-y-2 text-neutral-400">
-                <p>1234 Study Street, Learn City, ED 5678</p>
-                <p>Phone: +1 (123) 456-7890</p>
-                <p>Email: info@studystreak.com</p>
-              </div>
-
-              <div className="flex space-x-4 pt-4">
-                {["facebook", "twitter", "linkedin"].map((social, index) => (
-                  <a
-                    key={index}
-                    href="#"
-                    className="text-neutral-400 hover:text-white transition-colors duration-300 
-                    transform hover:-translate-y-1"
-                  >
-                    <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                      {/* SVG paths remain the same */}
-                    </svg>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-neutral-400">
-            <p>© 2024 STUDYSTREAK. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
