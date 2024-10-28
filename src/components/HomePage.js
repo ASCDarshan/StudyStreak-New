@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
-  Star,
   Clock,
   Calendar,
   BookOpen,
@@ -16,6 +15,8 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import TestimonialSection from "./Testimonial/TestimonialSection";
 import { Link, useNavigate } from "react-router-dom";
+import ajaxCall from "../helpers/ajaxCall";
+import Loading from "../components/UI/Loading";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -64,50 +65,6 @@ const HomePage = () => {
       icon: PenBoxIcon,
       iconColor: "text-accent-500",
       iconBgColor: "bg-accent-50",
-    },
-  ];
-  const examCourses = [
-    {
-      id: 1,
-      title: "IELTS Mastery Course",
-      icon: "ielts",
-      duration: "6 weeks",
-      level: "All Levels",
-      rating: 4.9,
-      reviews: 12500,
-      instructor: "Dr. Emma Watson",
-      image:
-        "http://localhost:3001/static/media/course.519b3df106ae19415253.jpg",
-    },
-    {
-      id: 2,
-      title: "GRE Comprehensive Prep",
-      icon: "gre",
-      duration: "8 weeks",
-      level: "Advanced",
-      rating: 4.8,
-      reviews: 10300,
-      instructor: "Prof. Robert Chen",
-    },
-    {
-      id: 3,
-      title: "GMAT Intensive Program",
-      icon: "gmat",
-      duration: "10 weeks",
-      level: "Intermediate",
-      rating: 4.7,
-      reviews: 9200,
-      instructor: "Sarah Johnson, MBA",
-    },
-    {
-      id: 4,
-      title: "TOEFL iBT Success Course",
-      icon: "toefl",
-      duration: "6 weeks",
-      level: "Beginner",
-      rating: 4.9,
-      reviews: 11400,
-      instructor: "Michael Brown, PhD",
     },
   ];
 
@@ -164,6 +121,58 @@ const HomePage = () => {
       instructor: "Michael Brown, PhD",
     },
   ];
+
+  const [courseList, setCouresList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/courselistview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response.status === 200) {
+          setCouresList(
+            response.data?.filter(({ course_type }) => course_type === "PUBLIC")
+          );
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
+  const getGradientClass = (index) => {
+    const gradients = [
+      "bg-gradient-to-br from-primary-400 to-primary-600",
+      "bg-gradient-to-br from-secondary-400 to-secondary-600",
+      "bg-gradient-to-br from-accent-400 to-accent-600",
+      "bg-gradient-to-br from-success-400 to-success-600",
+    ];
+    return gradients[index % gradients.length];
+  };
+
+  const formatDuration = (lessons) => {
+    if (!lessons || !lessons.length) return "N/A";
+    const totalMinutes = lessons.reduce((acc, lesson) => {
+      const duration = lesson.Lesson_Duration || "";
+      const minutes = parseInt(duration.split(" ")[0]) || 0;
+      return acc + minutes;
+    }, 0);
+    return `${totalMinutes} min`;
+  };
 
   return (
     <div className="bg-neutral-50 min-h-screen">
@@ -258,110 +267,90 @@ const HomePage = () => {
       </section>
 
       {/* Exam Courses Section */}
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
-                Popular Exam Courses
-              </h2>
-              <p className="text-neutral-600 mt-2">
-                Choose from our highly-rated exam preparation courses
-              </p>
-            </div>
-            <Link
-              to="/courses"
-              className="inline-flex items-center px-4 py-2 bg-primary-50 text-primary-600 rounded-xl
-              hover:bg-primary-100 transition-colors duration-300 group"
-            >
-              View All Courses
-              <ChevronRight
-                className="ml-2 transform group-hover:translate-x-1 transition-transform"
-                size={18}
-              />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {examCourses.map((course, index) => (
-              <div
-                key={index}
-                className="group bg-white rounded-xl overflow-hidden border border-neutral-200 shadow-card hover:shadow-card-hover hover:border-primary-200 transition-all duration-300 transform hover:-translate-y-1"
-              >
-                <div
-                  className={`h-48 relative overflow-hidden ${
-                    [
-                      "bg-gradient-to-br from-primary-400 to-primary-600",
-                      "bg-gradient-to-br from-secondary-400 to-secondary-600",
-                      "bg-gradient-to-br from-accent-400 to-accent-600",
-                      "bg-gradient-to-br from-success-400 to-success-600",
-                    ][index]
-                  }`}
-                >
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
-                  <img
-                    src={`${course.image}`}
-                    alt={course.title}
-                    className="w-full h-full object-cover absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-
-                <div className="p-6">
-                  <h3 className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 transition-colors duration-300">
-                    {course.title}
-                  </h3>
-                  <div className="flex items-center text-sm text-neutral-600 mb-3">
-                    <Clock size={16} className="mr-2" />
-                    <span>{course.duration}</span>
-                    <span className="mx-2">•</span>
-                    <span>{course.level}</span>
-                  </div>
-
-                  <div className="flex items-center mb-3">
-                    <div className="flex mr-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={16}
-                          className={`${
-                            i < Math.floor(course.rating)
-                              ? "text-warning-400 fill-current"
-                              : "text-neutral-200"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm font-medium text-neutral-700">
-                      {course.rating}
-                    </span>
-                    <span className="text-sm text-neutral-500 ml-2">
-                      ({course.reviews.toLocaleString()})
-                    </span>
-                  </div>
-
-                  <div className="flex items-center mb-4 pt-3 border-t border-neutral-100">
-                    <img
-                      src={`https://media.istockphoto.com/id/1327592506/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=BpR0FVaEa5F24GIw7K8nMWiiGmbb8qmhfkpXcp1dhQg=`}
-                      alt={course.instructor}
-                      className="w-8 h-8 rounded-full border-2 border-white shadow-soft"
-                    />
-                    <span className="text-sm text-neutral-600 ml-2">
-                      {course.instructor}
-                    </span>
-                  </div>
-
-                  <Link
-                    to={`/course/${course.id}`}
-                    className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-medium"
-                  >
-                    View Details
-                  </Link>
-                </div>
+      {isLoading ? (
+        <></>
+      ) : (
+        // <Loading />
+        <section className="py-12 md:py-16">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
+                  Popular Exam Courses
+                </h2>
+                <p className="text-neutral-600 mt-2">
+                  Choose from our highly-rated exam preparation courses
+                </p>
               </div>
-            ))}
+              <Link
+                to="/courses"
+                className="inline-flex items-center px-4 py-2 bg-primary-50 text-primary-600 rounded-xl
+              hover:bg-primary-100 transition-colors duration-300 group"
+              >
+                View All Courses
+                <ChevronRight
+                  className="ml-2 transform group-hover:translate-x-1 transition-transform"
+                  size={18}
+                />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {courseList.map((course, index) => (
+                <div
+                  key={course.id}
+                  className="group bg-white rounded-xl overflow-hidden border border-neutral-200 shadow-card hover:shadow-card-hover hover:border-primary-200 transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <div
+                    className={`h-48 relative overflow-hidden ${getGradientClass(
+                      index
+                    )}`}
+                  >
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
+                    <img
+                      src={course.Course_Thumbnail}
+                      alt={course.Course_Title}
+                      className="w-full h-full object-cover absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+
+                  <div className="p-6">
+                    <h3 className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 transition-colors duration-300">
+                      {course.Course_Title}
+                    </h3>
+                    <div className="flex items-center text-sm text-neutral-600 mb-3">
+                      <Clock size={16} className="mr-2" />
+                      <span>{formatDuration(course.lessons)}</span>
+                      <span className="mx-2">•</span>
+                      <span>{course.Level?.name || "N/A"}</span>
+                    </div>
+
+                    <div className="flex items-center mb-4 pt-3 border-t border-neutral-100">
+                      <img
+                        src="https://media.istockphoto.com/id/1327592506/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=BpR0FVaEa5F24GIw7K8nMWiiGmbb8qmhfkpXcp1dhQg="
+                        alt="Instructor"
+                        className="w-8 h-8 rounded-full border-2 border-white shadow-soft"
+                      />
+                      <span className="text-sm text-neutral-600 ml-2">
+                        {course.Language?.name || "N/A"}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col space-y-2">
+                      <Link
+                        to={`/course/${course.id}`}
+                        className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-medium"
+                      >
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* PTE Courses Section */}
       <section className="py-12 md:py-16 bg-neutral-100">
