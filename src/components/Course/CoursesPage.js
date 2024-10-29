@@ -1,14 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Search,
-  Filter,
-  Clock,
-  Star,
-  Calendar,
-  ArrowRight,
-} from "lucide-react";
-import ajaxCall from "../../helpers/ajaxCall";
+import { Search, Clock, Star, Calendar, ArrowRight } from "lucide-react";
 import CourseList from "./CourseList";
 
 const TestimonialCarousel = () => {
@@ -125,68 +117,10 @@ const TestimonialCarousel = () => {
 
 const CoursesPage = () => {
   const navigate = useNavigate();
-  const [selectedExam, setSelectedExam] = useState("All");
+  const [selectedExam, setSelectedExam] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const exams = ["All", "IELTS", "GRE", "GMAT", "TOEFL", "PTE"];
-
-  const courses = [
-    {
-      id: 1,
-      title: "IELTS Mastery Course",
-      exam: "IELTS",
-      instructor: "Dr. Emma Watson",
-      duration: "6 weeks",
-      level: "All Levels",
-      rating: 4.9,
-      students: 12500,
-      price: 199,
-    },
-    {
-      id: 2,
-      title: "GRE Comprehensive Prep",
-      exam: "GRE",
-      instructor: "Prof. Robert Chen",
-      duration: "8 weeks",
-      level: "Advanced",
-      rating: 4.8,
-      students: 10300,
-      price: 249,
-    },
-    {
-      id: 3,
-      title: "GMAT Intensive Program",
-      exam: "GMAT",
-      instructor: "Sarah Johnson, MBA",
-      duration: "10 weeks",
-      level: "Intermediate",
-      rating: 4.7,
-      students: 9200,
-      price: 299,
-    },
-    {
-      id: 4,
-      title: "TOEFL iBT Success Course",
-      exam: "TOEFL",
-      instructor: "Michael Brown, PhD",
-      duration: "6 weeks",
-      level: "Beginner",
-      rating: 4.9,
-      students: 11400,
-      price: 179,
-    },
-    {
-      id: 5,
-      title: "PTE Academic Exam Prep",
-      exam: "PTE",
-      instructor: "Dr. Lisa Zhang",
-      duration: "4 weeks",
-      level: "All Levels",
-      rating: 4.8,
-      students: 8600,
-      price: 159,
-    },
-  ];
+  const exams = ["All", "IELTS", "GRE", "GMAT", "TOEFL", "PTE", "GENERAL"];
 
   const webinars = [
     {
@@ -230,51 +164,6 @@ const CoursesPage = () => {
       date: "2024-09-20",
     },
   ];
-
-  const [courseList, setCourseList] = useState([]);
-  console.log(courseList);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/courselistview/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          },
-          8000
-        );
-
-        if (response.status === 200) {
-          setCourseList(
-            response.data?.filter(({ course_type }) => course_type === "PUBLIC")
-          );
-        }
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    const searchResults = courses.filter((course) => {
-      const matchesSearch =
-        course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.exam.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.level.toLowerCase().includes(searchTerm.toLowerCase());
-
-      const matchesExam =
-        selectedExam === "All" || course.exam === selectedExam;
-
-      return matchesSearch && matchesExam;
-    });
-  }, [searchTerm, selectedExam]);
 
   // Handle assessment button click
   const handleAssessmentClick = () => {
@@ -331,7 +220,7 @@ const CoursesPage = () => {
               {exams.map((exam) => (
                 <button
                   key={exam}
-                  onClick={() => setSelectedExam(exam)}
+                  onClick={() => setSelectedExam(exam === "All" ? "" : exam)}
                   className={`px-6 py-2 rounded-full whitespace-nowrap transition-all duration-300
                     ${
                       selectedExam === exam
@@ -343,13 +232,6 @@ const CoursesPage = () => {
                 </button>
               ))}
             </div>
-            <button
-              className="flex items-center gap-2 text-primary-600 hover:text-primary-700 
-              transition-colors px-4 py-2 rounded-lg hover:bg-primary-50"
-            >
-              <Filter size={20} />
-              <span className="hidden md:inline">More Filters</span>
-            </button>
           </div>
         </div>
       </div>
@@ -357,7 +239,7 @@ const CoursesPage = () => {
       {/* Main Content */}
       <main className="py-8">
         {/* Course Grid */}
-        <CourseList />
+        <CourseList selectedCategory={selectedExam} searchTerm={searchTerm} />
 
         {/* Webinars Section */}
         <section className="container mx-auto px-4 mt-8">

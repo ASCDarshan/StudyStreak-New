@@ -126,7 +126,7 @@ const SignUpForm = () => {
           errMsg: data?.msg,
           isSubmitting: false,
         });
-        navigate("/");
+        navigate("/login");
       } else if (response.status === 400) {
         setFormStatus({
           isError: true,

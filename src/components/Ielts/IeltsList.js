@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import moment from "moment/moment";
 
-const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
+const IeltsList = ({ selectedCategory = "IELTS" }) => {
   const [courseList, setCouresList] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/courselistview/?search=${searchTerm}&Category__name=${selectedCategory}`,
+          `/courselistview/?Category__name=${selectedCategory}`,
           {
             headers: {
               Accept: "application/json",
@@ -31,7 +31,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
         console.log("error", error);
       }
     })();
-  }, [searchTerm, selectedCategory]);
+  }, [selectedCategory]);
 
   const getGradientClass = (index) => {
     const gradients = [
@@ -60,19 +60,8 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
   };
 
   return (
-    <section className="py-8 md:py-12">
+    <section className="py-8 md:py-2">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
-              Popular Exam Courses
-            </h2>
-            <p className="text-neutral-600 mt-2">
-              Choose from our highly-rated exam preparation courses
-            </p>
-          </div>
-        </div>
-
         {courseList && courseList.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {courseList.map((course, index) => (
@@ -138,4 +127,4 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
   );
 };
 
-export default CourseList;
+export default IeltsList;

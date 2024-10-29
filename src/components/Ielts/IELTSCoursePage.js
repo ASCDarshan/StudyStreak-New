@@ -1,15 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Clock,
-  Star,
-  BookOpen,
-  User,
-  Award,
-  Target,
-  Check,
-} from "lucide-react";
+import { BookOpen, User, Award, Target } from "lucide-react";
 import EnglishTest from "../EnglishTest/EnglishTest";
+import IeltsList from "./IeltsList";
 
 const IELTSPage = () => {
   const [selectedFilter, setSelectedFilter] = useState("All");
@@ -17,64 +10,6 @@ const IELTSPage = () => {
 
   // IELTS-specific courses data
   const ieltsModules = ["All", "Listening", "Reading", "Writing", "Speaking"];
-
-  const ieltsCourses = [
-    {
-      id: 1,
-      title: "IELTS Complete Preparation",
-      category: "All Modules",
-      instructor: "Dr. Emma Watson",
-      duration: "8 weeks",
-      level: "All Levels",
-      rating: 4.9,
-      students: 12500,
-      price: 299,
-      features: [
-        "Comprehensive study material",
-        "Practice tests with evaluation",
-        "Live classes",
-        "One-on-one speaking sessions",
-        "Writing task evaluation",
-      ],
-    },
-    {
-      id: 2,
-      title: "IELTS Speaking Mastery",
-      category: "Speaking",
-      instructor: "Prof. Sarah Miller",
-      duration: "4 weeks",
-      level: "Intermediate",
-      rating: 4.8,
-      students: 8300,
-      price: 149,
-      features: [
-        "Daily speaking practice",
-        "Pronunciation workshops",
-        "Mock interviews",
-        "Vocabulary building",
-        "Accent training",
-      ],
-    },
-    {
-      id: 3,
-      title: "IELTS Writing Excellence",
-      category: "Writing",
-      instructor: "Dr. John Peterson",
-      duration: "6 weeks",
-      level: "Advanced",
-      rating: 4.9,
-      students: 7200,
-      price: 199,
-      features: [
-        "Essay writing techniques",
-        "Task 1 & 2 strategies",
-        "Personal feedback",
-        "Sample answers analysis",
-        "Grammar improvement",
-      ],
-    },
-    // Add more IELTS courses...
-  ];
 
   const successStories = [
     {
@@ -252,107 +187,7 @@ const IELTSPage = () => {
           </div>
 
           {/* Course Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-4 gap-6">
-            {ieltsCourses
-              .filter(
-                (course) =>
-                  selectedFilter === "All" || course.category === selectedFilter
-              )
-              .map((course) => (
-                <div
-                  key={course.id}
-                  className="bg-white rounded-2xl overflow-hidden border border-neutral-200
-                    hover:border-primary-200 shadow-card hover:shadow-card-hover 
-                    transition-all duration-300 transform hover:-translate-y-1"
-                >
-                  {/* Course Header */}
-                  <div
-                    className="relative h-48 bg-gradient-to-br from-primary-500 to-primary-600 
-                    p-6 flex flex-col justify-between"
-                  >
-                    <div
-                      className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm 
-                      px-3 py-1 rounded-full text-primary-600 text-sm font-medium"
-                    >
-                      {course.category}
-                    </div>
-                    <h3 className="text-xl font-bold text-white mt-auto">
-                      {course.title}
-                    </h3>
-                  </div>
-
-                  {/* Course Content */}
-                  <div className="p-6 space-y-6">
-                    {/* Instructor & Duration */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="w-10 h-10 rounded-full bg-primary-100 flex items-center 
-                          justify-center text-primary-600 font-bold"
-                        >
-                          {course.instructor.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-neutral-800">
-                            {course.instructor}
-                          </p>
-                          <p className="text-xs text-neutral-500">
-                            {course.level}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-sm text-neutral-600">
-                        <Clock className="inline-block w-4 h-4 mr-1" />
-                        {course.duration}
-                      </div>
-                    </div>
-
-                    {/* Features */}
-                    <div className="space-y-2">
-                      {course.features.map((feature, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-2 text-sm text-neutral-600"
-                        >
-                          <Check size={16} className="text-primary-600" />
-                          {feature}
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Ratings & Price */}
-                    <div className="flex items-center justify-between pt-4 border-t border-neutral-100">
-                      <div className="flex items-center gap-2">
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              size={16}
-                              className="text-warning-400 fill-current"
-                            />
-                          ))}
-                        </div>
-                        <span className="text-sm text-neutral-600">
-                          ({course.students.toLocaleString()})
-                        </span>
-                      </div>
-                      <span className="text-xl font-bold text-primary-600">
-                        ${course.price}
-                      </span>
-                    </div>
-
-                    {/* CTA Button */}
-                    <Link
-                      to={`/ielts/${course.id}`}
-                      className="block w-full text-center bg-primary-600 text-white py-3 
-                        rounded-xl hover:bg-primary-700 transition-colors duration-300 font-medium"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-              ))}
-          </div>
+          <IeltsList />
         </div>
       </section>
 
