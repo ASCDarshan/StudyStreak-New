@@ -10,9 +10,10 @@ import {
   BookOpen,
   ThumbsUp,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const WhyChooseUsPage = () => {
+  const navigate = useNavigate();
   const statistics = [
     { number: "15,000+", label: "Students Trained", icon: Users },
     { number: "95%", label: "Success Rate", icon: Trophy },
@@ -84,6 +85,13 @@ const WhyChooseUsPage = () => {
     "Course Completion Certificate",
   ];
 
+  const handleDemoClick = () => {
+    navigate("/talk-to-us");
+  };
+  const handleCourseClick = () => {
+    navigate("/courses");
+  };
+
   return (
     <div className="bg-neutral-50 min-h-screen">
       {/* Hero Section */}
@@ -107,12 +115,14 @@ const WhyChooseUsPage = () => {
             </p>
             <div className="flex justify-center gap-4 animate-fade-in-up delay-200">
               <button
+                onClick={handleDemoClick}
                 className="bg-white text-primary-600 px-8 py-3 rounded-xl 
                 hover:bg-primary-50 transition-all duration-300 font-medium"
               >
                 Book Free Demo
               </button>
               <button
+                onClick={handleCourseClick}
                 className="bg-primary-700 text-white px-8 py-3 rounded-xl 
                 hover:bg-primary-800 transition-all duration-300 font-medium 
                 border border-primary-500"

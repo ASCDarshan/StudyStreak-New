@@ -12,6 +12,13 @@ import {
   GraduationCap,
   CheckCircle,
 } from "lucide-react";
+import { toast } from "react-toastify";
+import ajaxCall from "../../helpers/ajaxCall";
+import { useSelector } from "react-redux";
+import { useCheckAuth } from "../hooks/useCheckAuth";
+import { useNavigate, useParams } from "react-router-dom";
+import moment from "moment/moment";
+import PackageDetails from "./PackageDetails";
 
 // Separate Testimonials Component
 const TestimonialCarousel = () => {
@@ -127,111 +134,129 @@ const TestimonialCarousel = () => {
 };
 
 const CourseDetailPage = () => {
-  const [selectedPackage, setSelectedPackage] = useState(null);
+  const navigate = useNavigate();
+  const { courseId } = useParams();
+  const { checkAuth } = useCheckAuth();
+  const authData = useSelector((state) => state.authStore);
+  const [courseDetail, setCourseDetail] = useState();
+  const [batchData, setBatchData] = useState([]);
+  const [coursePackages, setCoursePackages] = useState();
   const [openSection, setOpenSection] = useState(
     "Section 1: Introduction to IELTS"
   );
+  const packageIds = coursePackages?.packages?.map((item) => item?.package_id);
+  console.log(courseDetail);
+  const batches = batchData.filter((batch) =>
+    packageIds?.includes(batch?.add_package?.id)
+  );
 
-  // Course data
-  const course = {
-    id: 1,
-    title: "IELTS Academic Premium",
-    instructor: "Instructor-1",
-    category: "IELTS",
-    startDate: "31-Mar-2024",
-    endDate: "01-Jan-2025",
-    level: "Beginner",
-    language: "Gujarati & English",
-    maxEnroll: 500,
-    batchTimes: ["11:00 AM", "06:00 PM", "03:00 PM"],
-    batchType: "Regular Batch",
-    bannerImage: "/course-banner.jpg",
-    description:
-      "Comprehensive IELTS preparation course covering all four modules.",
-    curriculum: [
-      {
-        title: "Section 1: Introduction to IELTS",
-        lessons: [
-          "Lesson 1 - What is the IELTS?",
-          "Lesson 2 - Understanding IELTS Format",
-        ],
-      },
-      {
-        title: "Section 2: Listening Skills",
-        lessons: [
-          "Lesson 1 - Basic Listening Strategies",
-          "Lesson 2 - Practice Tests",
-        ],
-      },
-    ],
-  };
+  useEffect(() => {
+    checkAuth();
+  }, [authData, checkAuth]);
 
-  const packages = [
-    {
-      name: "IELTS Express",
-      price: 2999,
-      features: [
-        "Speaking Test (1)",
-        "Writing Evaluation (1)",
-        "Practice Test (1)",
-        "Full Length Test (1)",
-        "Speaking Practice (1)",
-        "Tutor Support (1)",
-        "Webinar (1)",
-        "Counselling (1)",
-        "Group Doubt Solving (1)",
-        "One To One Doubt Solving (1)",
-      ],
-    },
-    {
-      name: "IELTS Gold",
-      price: 3999,
-      features: [
-        "Speaking Test (10)",
-        "Writing Evaluation (1)",
-        "Practice Test (10)",
-        "Full Length Test (10)",
-        "Speaking Practice (5)",
-        "Tutor Support (4)",
-        "Webinar (4)",
-        "Counselling (4)",
-        "Group Doubt Solving (4)",
-        "One To One Doubt Solving (10)",
-      ],
-    },
-    {
-      name: "IELTS Silver",
-      price: 4999,
-      features: [
-        "Speaking Test (10)",
-        "Writing Evaluation (1)",
-        "Practice Test (10)",
-        "Full Length Test (10)",
-        "Speaking Practice (5)",
-        "Tutor Support (4)",
-        "Webinar (4)",
-        "Counselling (4)",
-        "Group Doubt Solving (4)",
-        "One To One Doubt Solving (10)",
-      ],
-    },
-    {
-      name: "PTE",
-      price: 5999,
-      features: [
-        "Speaking Test (10)",
-        "Writing Evaluation (1)",
-        "Practice Test (10)",
-        "Full Length Test (10)",
-        "Speaking Practice (5)",
-        "Tutor Support (4)",
-        "Webinar (4)",
-        "Counselling (4)",
-        "Group Doubt Solving (4)",
-        "One To One Doubt Solving (10)",
-      ],
-    },
-  ];
+  useEffect(() => {
+    (async () => {
+      if (!courseId || isNaN(courseId)) {
+        toast.error("Please select a valid course");
+        navigate("/");
+        return;
+      }
+      try {
+        const response = await ajaxCall(
+          `/courseretupddel/${courseId}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "PATCH",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          const section = [];
+          response.data?.lessons?.forEach((lesson) => {
+            const isSessionExist = section.find(
+              (item) => item.id === lesson?.section.id
+            );
+            if (!isSessionExist) {
+              section.push(lesson?.section);
+            }
+          });
+          const updatedData = {
+            ...response.data,
+            section,
+          };
+          section.forEach((sectionItem) => {
+            const lessons = response.data?.lessons?.filter(
+              (lesson) => lesson?.section.id === sectionItem.id
+            );
+            sectionItem.lessons = lessons;
+          });
+          setCourseDetail(updatedData);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [courseId, navigate]);
+
+  useEffect(() => {
+    (async () => {
+      if (!courseId || isNaN(courseId)) {
+        toast.error("Please select a valid course");
+        navigate("/");
+        return;
+      }
+      try {
+        const response = await ajaxCall(
+          `/course/${courseId}/packages/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setCoursePackages(response.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [courseId, navigate]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/batchview/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setBatchData(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
 
   const relatedCourses = [
     {
@@ -263,12 +288,20 @@ const CourseDetailPage = () => {
     },
   ];
 
+  const startDate = courseDetail?.EnrollmentStartDate
+    ? moment(courseDetail?.EnrollmentStartDate).format("DD-MMM-YYYY")
+    : "";
+
+  const endDate = courseDetail?.EnrollmentEndDate
+    ? moment(courseDetail?.EnrollmentEndDate).format("DD-MMM-YYYY")
+    : "";
+
   return (
     <div className="bg-neutral-50 min-h-screen relative">
       {/* Course Banner */}
       <div
         className="relative h-[400px] bg-cover bg-center"
-        style={{ backgroundImage: `url(${course.bannerImage})` }}
+        style={{ backgroundImage: `url(${courseDetail?.Course_Thumbnail})` }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-primary-900/90 to-primary-900/50"></div>
         <div className="absolute inset-0 flex flex-col justify-center">
@@ -278,28 +311,24 @@ const CourseDetailPage = () => {
                 className="text-primary-100 mb-4 inline-flex items-center 
                 bg-primary-800/30 rounded-full px-4 py-1"
               >
-                {course.category}
+                {courseDetail?.Category?.name}
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                {course.title}
+                {courseDetail?.Course_Title}
               </h1>
               <p className="text-primary-100 text-lg mb-8 max-w-2xl">
-                {course.description}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: courseDetail?.Short_Description,
+                  }}
+                ></div>
               </p>
               <div className="flex flex-wrap gap-6">
                 <div className="flex items-center text-white">
-                  <Clock size={20} className="mr-2" />
-                  <span>
-                    Duration: {course.startDate} - {course.endDate}
-                  </span>
-                </div>
-                <div className="flex items-center text-white">
                   <Users size={20} className="mr-2" />
-                  <span>Max Enrollment: {course.maxEnroll}</span>
-                </div>
-                <div className="flex items-center text-white">
-                  <Globe size={20} className="mr-2" />
-                  <span>Language: {course.language}</span>
+                  <span>
+                    Max Enrollment : {courseDetail?.max_enrollments || 0}
+                  </span>
                 </div>
               </div>
             </div>
@@ -322,7 +351,7 @@ const CourseDetailPage = () => {
                 <div>
                   <p className="text-sm text-neutral-500 mb-1">Instructor</p>
                   <p className="text-neutral-800 font-medium">
-                    {course.instructor}
+                    {courseDetail?.primary_instructor?.username}
                   </p>
                 </div>
               </div>
@@ -332,7 +361,9 @@ const CourseDetailPage = () => {
                 </div>
                 <div>
                   <p className="text-sm text-neutral-500 mb-1">Course Level</p>
-                  <p className="text-neutral-800 font-medium">{course.level}</p>
+                  <p className="text-neutral-800 font-medium">
+                    {courseDetail?.Level?.name}
+                  </p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
@@ -340,14 +371,16 @@ const CourseDetailPage = () => {
                   <Clock className="w-6 h-6 text-accent-500" />
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-500 mb-1">Batch Times</p>
+                  <p className="text-sm text-neutral-500 mb-1">
+                    {" "}
+                    Batch Start Time :{" "}
+                  </p>
                   <div className="flex flex-wrap gap-2">
-                    {course.batchTimes.map((time, index) => (
-                      <span
-                        key={index}
-                        className="bg-accent-50 text-accent-600 px-3 py-1 rounded-lg text-sm"
-                      >
-                        {time}
+                    {batches.map(({ batch_start_timing }) => (
+                      <span className="bg-accent-50 text-accent-600 px-3 py-1 rounded-lg text-sm">
+                        {moment(batch_start_timing, "HH:mm:ss").format(
+                          "hh:mm A"
+                        )}
                       </span>
                     ))}
                   </div>
@@ -362,7 +395,7 @@ const CourseDetailPage = () => {
                 <div>
                   <p className="text-sm text-neutral-500 mb-1">Duration</p>
                   <p className="text-neutral-800 font-medium">
-                    {course.startDate} - {course.endDate}
+                    {startDate} - {endDate}
                   </p>
                 </div>
               </div>
@@ -372,9 +405,13 @@ const CourseDetailPage = () => {
                 </div>
                 <div>
                   <p className="text-sm text-neutral-500 mb-1">Batch Type</p>
-                  <p className="text-neutral-800 font-medium">
-                    {course.batchType}
-                  </p>
+                  {batches?.map(({ batch_name }) => {
+                    return (
+                      <p className="text-neutral-800 font-medium">
+                        {batch_name}
+                      </p>
+                    );
+                  })}
                 </div>
               </div>
               <div className="flex items-start space-x-4">
@@ -384,7 +421,7 @@ const CourseDetailPage = () => {
                 <div>
                   <p className="text-sm text-neutral-500 mb-1">Language</p>
                   <p className="text-neutral-800 font-medium">
-                    {course.language}
+                    {courseDetail?.Language?.name}
                   </p>
                 </div>
               </div>
@@ -393,148 +430,20 @@ const CourseDetailPage = () => {
         </div>
 
         {/* Packages */}
-        {/* Packages Section */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-heading font-bold text-neutral-800 mb-8">
-            Choose Your Package
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {packages.map((pkg, index) => (
-              <div
-                key={index}
-                className={`group bg-white rounded-3xl p-8 transition-all duration-300 relative
-          ${
-            selectedPackage === index
-              ? "border-2 border-primary-600 shadow-elevated scale-[1.02]"
-              : "border border-neutral-200 shadow-card hover:shadow-card-hover hover:scale-[1.01]"
-          }`}
-              >
-                {/* Package Header */}
-                <div className="space-y-4 mb-8">
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-2">
-                      <h3 className="text-2xl font-bold text-neutral-800">
-                        {pkg.name}
-                      </h3>
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-4xl font-bold text-primary-700">
-                          ₹{pkg.price}
-                        </span>
-                        <span className="text-sm text-neutral-600">
-                          /package
-                        </span>
-                      </div>
-                    </div>
-                    {selectedPackage === index && (
-                      <div className="bg-primary-100 p-2 rounded-xl">
-                        <CheckCircle className="w-6 h-6 text-primary-700" />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Feature Chips */}
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {pkg.hasLiveClasses && (
-                      <div
-                        className="inline-flex items-center gap-1.5 bg-success-100 text-success-700 
-                px-3 py-1 rounded-full text-sm font-medium"
-                      >
-                        <div className="w-2 h-2 bg-success-500 rounded-full animate-pulse" />
-                        Live Classes Available
-                      </div>
-                    )}
-                    {pkg.hasPracticeTest && (
-                      <div
-                        className="inline-flex items-center gap-1.5 bg-info-100 text-info-700 
-                px-3 py-1 rounded-full text-sm font-medium"
-                      >
-                        <CheckCircle size={14} />
-                        Free Practice Test
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Features List */}
-                <div className="space-y-6 mb-8">
-                  {pkg.features.map((feature, i) => {
-                    const [title, count] = feature.split("(");
-                    const number = count ? count.replace(")", "") : "";
-
-                    return (
-                      <div key={i} className="flex items-start gap-3">
-                        <div
-                          className={`p-1 rounded-full ${
-                            selectedPackage === index
-                              ? "bg-primary-200 text-primary-700"
-                              : "bg-neutral-200 text-neutral-700"
-                          }`}
-                        >
-                          <CheckCircle size={16} className="text-current" />
-                        </div>
-                        <div className="flex-1 space-y-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-neutral-800 font-medium">
-                              {title}
-                            </span>
-                            <span
-                              className={`font-semibold ${
-                                selectedPackage === index
-                                  ? "text-primary-700"
-                                  : "text-neutral-700"
-                              }`}
-                            >
-                              {number}
-                            </span>
-                          </div>
-                          <div className="w-full bg-neutral-200 rounded-full h-1.5">
-                            <div
-                              className={`h-1.5 rounded-full transition-all duration-300 ${
-                                selectedPackage === index
-                                  ? "bg-primary-600"
-                                  : "bg-neutral-400"
-                              }`}
-                              style={{
-                                width: `${Math.max(
-                                  (parseInt(number) / 10) * 100,
-                                  10
-                                )}%`,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Action Button */}
-                <button
-                  onClick={() => setSelectedPackage(index)}
-                  className={`w-full py-4 rounded-xl font-semibold transition-all duration-300
-            ${
-              selectedPackage === index
-                ? "bg-primary-600 text-white hover:bg-primary-700 shadow-soft"
-                : "bg-primary-100 text-primary-700 hover:bg-primary-200"
-            } transform hover:-translate-y-0.5`}
-                >
-                  {selectedPackage === index
-                    ? "Selected Package"
-                    : "Select Package"}
-                </button>
-
-                {/* Popular Badge */}
-                {pkg.name === "IELTS Gold" && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-primary-600 text-white px-4 py-1 rounded-full text-sm font-medium">
-                      Most Popular
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+        {coursePackages?.packages?.length >= 1 ? (
+          <PackageDetails
+            packages={coursePackages?.packages}
+            courseId={courseId}
+            courseName={courseDetail?.Course_Title}
+            courseType={courseDetail?.course_delivery}
+          />
+        ) : (
+          <div>
+            <h5 className="text-danger sp_20 col--30">
+              No Packages Available For This Course !!
+            </h5>
           </div>
-        </div>
+        )}
 
         {/* Curriculum Section */}
         <div className="mb-12">
@@ -542,65 +451,114 @@ const CourseDetailPage = () => {
             Course Curriculum
           </h2>
           <div className="bg-white rounded-2xl shadow-card border border-neutral-200 overflow-hidden">
-            {course.curriculum.map((section, index) => (
-              <div
-                key={index}
-                className="border-b border-neutral-200 last:border-b-0"
-              >
-                <button
-                  className="flex justify-between items-center w-full p-6 hover:bg-primary-50 
-                  transition-colors duration-300 text-left"
-                  onClick={() =>
-                    setOpenSection(
-                      openSection === section.title ? null : section.title
-                    )
-                  }
-                >
-                  <div className="flex items-center">
-                    <div
-                      className={`w-8 h-8 rounded-lg mr-4 flex items-center justify-center
-                      ${
-                        openSection === section.title
-                          ? "bg-primary-100 text-primary-600"
-                          : "bg-neutral-100 text-neutral-600"
-                      }`}
+            {courseDetail?.section?.length > 0 ? (
+              courseDetail.section
+                .sort((a, b) => {
+                  const nameA = a?.name?.toLowerCase();
+                  const nameB = b?.name?.toLowerCase();
+                  if (nameA < nameB) return -1;
+                  if (nameA > nameB) return 1;
+                  return 0;
+                })
+                .map((sectionItem, index) => (
+                  <div
+                    key={index}
+                    className="border-b border-neutral-200 last:border-b-0"
+                  >
+                    <button
+                      className="flex justify-between items-center w-full p-6 hover:bg-primary-50 
+                            transition-colors duration-300 text-left"
+                      onClick={() =>
+                        setOpenSection(
+                          openSection === sectionItem.name
+                            ? null
+                            : sectionItem.name
+                        )
+                      }
                     >
-                      {index + 1}
-                    </div>
-                    <span className="font-medium text-neutral-800">
-                      {section.title}
-                    </span>
-                  </div>
-                  {openSection === section.title ? (
-                    <ChevronUp
-                      className={`w-5 h-5 transform transition-transform duration-300 
-                      ${
-                        openSection === section.title
-                          ? "text-primary-600"
-                          : "text-neutral-400"
-                      }`}
-                    />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-neutral-400" />
-                  )}
-                </button>
-                {openSection === section.title && (
-                  <div className="bg-neutral-50 px-6 py-4 border-t border-neutral-200">
-                    <ul className="space-y-3">
-                      {section.lessons.map((lesson, i) => (
-                        <li
-                          key={i}
-                          className="flex items-center text-neutral-600"
+                      <div className="flex items-center">
+                        <div
+                          className={`w-8 h-8 rounded-lg mr-4 flex items-center justify-center
+                        ${
+                          openSection === sectionItem.name
+                            ? "bg-primary-100 text-primary-600"
+                            : "bg-neutral-100 text-neutral-600"
+                        }`}
                         >
-                          <div className="w-2 h-2 rounded-full bg-primary-300 mr-3"></div>
-                          {lesson}
-                        </li>
-                      ))}
-                    </ul>
+                          {index + 1}
+                        </div>
+                        <span className="font-medium text-neutral-800">
+                          {sectionItem.name}
+                        </span>
+                      </div>
+                      {openSection === sectionItem.name ? (
+                        <ChevronUp
+                          className={`w-5 h-5 transform transition-transform duration-300 
+                        ${
+                          openSection === sectionItem.name
+                            ? "text-primary-600"
+                            : "text-neutral-400"
+                        }`}
+                        />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-neutral-400" />
+                      )}
+                    </button>
+                    {openSection === sectionItem.name && (
+                      <div className="bg-neutral-50 px-6 py-4 border-t border-neutral-200">
+                        <ul className="space-y-3">
+                          {sectionItem.lessons
+                            ?.sort((a, b) => {
+                              const lessonA = parseInt(
+                                a?.Lesson_Title.match(/\d+/)?.[0]
+                              );
+                              const lessonB = parseInt(
+                                b?.Lesson_Title.match(/\d+/)?.[0]
+                              );
+                              return lessonA - lessonB;
+                            })
+                            .map((lessonItem, i) => (
+                              <li
+                                key={i}
+                                className="flex items-center justify-between text-neutral-600"
+                              >
+                                <div className="flex items-center">
+                                  <div className="w-2 h-2 rounded-full bg-primary-300 mr-3"></div>
+                                  <span>{lessonItem.Lesson_Title}</span>
+                                </div>
+                                <span className="text-neutral-400">
+                                  <svg
+                                    className="w-4 h-4"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 15v2m0 0v2m0-2h2m-2 0H8"
+                                    />
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2z"
+                                    />
+                                  </svg>
+                                </span>
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                )}
+                ))
+            ) : (
+              <div className="p-6 text-center text-neutral-600">
+                No curriculum available
               </div>
-            ))}
+            )}
           </div>
         </div>
 

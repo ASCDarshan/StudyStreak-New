@@ -5,7 +5,7 @@ import {
   getFromLocalStorage,
   setToLocalStorage,
 } from "../../helpers/helperFunction";
-import { authAction } from "../store/authStore";
+import { authAction } from "../../store/authStore";
 import { useNavigate } from "react-router-dom";
 
 export function useCheckAuth() {

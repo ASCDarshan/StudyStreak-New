@@ -4,11 +4,12 @@ import {
   Search,
   Filter,
   Clock,
-  BarChart,
   Star,
   Calendar,
   ArrowRight,
 } from "lucide-react";
+import ajaxCall from "../../helpers/ajaxCall";
+import CourseList from "./CourseList";
 
 const TestimonialCarousel = () => {
   const testimonials = [
@@ -126,7 +127,6 @@ const CoursesPage = () => {
   const navigate = useNavigate();
   const [selectedExam, setSelectedExam] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCourses, setFilteredCourses] = useState([]);
 
   const exams = ["All", "IELTS", "GRE", "GMAT", "TOEFL", "PTE"];
 
@@ -231,6 +231,36 @@ const CoursesPage = () => {
     },
   ];
 
+  const [courseList, setCourseList] = useState([]);
+  console.log(courseList);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/courselistview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response.status === 200) {
+          setCourseList(
+            response.data?.filter(({ course_type }) => course_type === "PUBLIC")
+          );
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+      }
+    })();
+  }, []);
+
   useEffect(() => {
     const searchResults = courses.filter((course) => {
       const matchesSearch =
@@ -244,8 +274,6 @@ const CoursesPage = () => {
 
       return matchesSearch && matchesExam;
     });
-
-    setFilteredCourses(searchResults);
   }, [searchTerm, selectedExam]);
 
   // Handle assessment button click
@@ -329,109 +357,7 @@ const CoursesPage = () => {
       {/* Main Content */}
       <main className="py-8">
         {/* Course Grid */}
-        <section className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-4  gap-6">
-            {filteredCourses.map((course, index) => (
-              <div
-                key={course.id}
-                className="group bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all 
-                  duration-300 overflow-hidden border border-neutral-200 hover:border-primary-200
-                  transform hover:-translate-y-1 animate-fade-in-up"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {/* Course Card Header */}
-                <div
-                  className="relative h-48 bg-gradient-to-br from-primary-500 to-primary-600 
-                  overflow-hidden group-hover:from-primary-600 group-hover:to-primary-700 
-                  transition-all duration-300"
-                >
-                  <div className="absolute inset-0 bg-primary-900/10"></div>
-                  <div className="absolute bottom-4 left-4">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                      <span className="text-primary-600 font-medium">
-                        {course.exam}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3
-                    className="text-xl font-bold text-neutral-800 mb-3 line-clamp-2 
-                    group-hover:text-primary-600 transition-colors"
-                  >
-                    {course.title}
-                  </h3>
-                  <p className="text-primary-600 mb-4 flex items-center gap-2">
-                    <div
-                      className="w-8 h-8 rounded-full bg-primary-100 flex items-center 
-                      justify-center text-primary-600"
-                    >
-                      {course.instructor.charAt(0)}
-                    </div>
-                    <span>{course.instructor}</span>
-                  </p>
-
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600 mb-4">
-                    <div className="flex items-center gap-1.5">
-                      <Clock size={16} />
-                      <span>{course.duration}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <BarChart size={16} />
-                      <span>{course.level}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center mb-6">
-                    <div className="flex mr-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={16}
-                          className={`${
-                            i < Math.floor(course.rating)
-                              ? "text-warning-400 fill-current"
-                              : "text-neutral-200"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="font-medium text-neutral-700">
-                      {course.rating}
-                    </span>
-                    <span className="ml-2 text-sm text-neutral-500">
-                      ({course.students.toLocaleString()})
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-neutral-100">
-                    <div className="text-2xl font-bold text-primary-600">
-                      ${course.price}
-                      <span className="text-sm font-normal text-neutral-500 ml-1">
-                        USD
-                      </span>
-                    </div>
-                    <Link
-                      to={`/course/${course.id}`}
-                      className="bg-primary-50 text-primary-600 px-4 py-2 rounded-xl 
-                        hover:bg-primary-100 transition-colors duration-300 font-medium
-                        flex items-center gap-2 group-hover:bg-primary-600 
-                        group-hover:text-white"
-                    >
-                      View Details
-                      <ArrowRight
-                        size={16}
-                        className="transition-transform 
-                        group-hover:translate-x-1"
-                      />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        <CourseList />
 
         {/* Webinars Section */}
         <section className="container mx-auto px-4 mt-8">
@@ -488,7 +414,7 @@ const CoursesPage = () => {
               Latest from Our Blog
             </h2>
             <Link
-              to="/blog"
+              to="/blogs"
               className="text-primary-600 hover:text-primary-700 flex items-center gap-2"
             >
               View All <ArrowRight size={16} />
@@ -513,7 +439,7 @@ const CoursesPage = () => {
                 </div>
                 <div className="bg-primary-600 p-4 hover:bg-primary-700 transition-colors duration-300">
                   <Link
-                    to="#"
+                    to="/blogs"
                     className="text-white flex items-center justify-center gap-2"
                   >
                     Read More <ArrowRight size={16} />

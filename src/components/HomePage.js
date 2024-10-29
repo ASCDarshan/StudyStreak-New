@@ -15,14 +15,20 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import TestimonialSection from "./Testimonial/TestimonialSection";
 import { Link, useNavigate } from "react-router-dom";
+import CourseList from "./Course/CourseList";
 import ajaxCall from "../helpers/ajaxCall";
-import Loading from "../components/UI/Loading";
 
 const HomePage = () => {
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
   const navigate = useNavigate();
   const handleExplorecourses = () => {
     navigate("/courses");
   };
+
+  const handlestartJourney = () => {
+    navigate("/login");
+  };
+
   const features = [
     {
       title: "All Major Test Preparations",
@@ -101,32 +107,9 @@ const HomePage = () => {
     },
   ];
 
-  const upcomingWebinars = [
-    {
-      title: "IELTS Writing Task 2 Strategies",
-      date: "2024-10-15",
-      time: "14:00 UTC",
-      instructor: "Dr. Emma Watson",
-    },
-    {
-      title: "GRE Quantitative Reasoning Tips",
-      date: "2024-10-18",
-      time: "18:00 UTC",
-      instructor: "Prof. Robert Chen",
-    },
-    {
-      title: "TOEFL Speaking Section Mastery",
-      date: "2024-10-20",
-      time: "16:00 UTC",
-      instructor: "Michael Brown, PhD",
-    },
-  ];
-
-  const [courseList, setCouresList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [webinars, setWebinars] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -135,43 +118,36 @@ const HomePage = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
+              Authorization: `Bearer ${loginInfo?.accessToken}`,
             },
             method: "GET",
           },
           8000
         );
-
         if (response.status === 200) {
-          setCouresList(
-            response.data?.filter(({ course_type }) => course_type === "PUBLIC")
-          );
+          setWebinars(response.data);
         }
       } catch (error) {
         console.log("error", error);
-      } finally {
-        setIsLoading(false);
       }
     })();
   }, []);
 
-  const getGradientClass = (index) => {
-    const gradients = [
-      "bg-gradient-to-br from-primary-400 to-primary-600",
-      "bg-gradient-to-br from-secondary-400 to-secondary-600",
-      "bg-gradient-to-br from-accent-400 to-accent-600",
-      "bg-gradient-to-br from-success-400 to-success-600",
-    ];
-    return gradients[index % gradients.length];
-  };
-
-  const formatDuration = (lessons) => {
-    if (!lessons || !lessons.length) return "N/A";
-    const totalMinutes = lessons.reduce((acc, lesson) => {
-      const duration = lesson.Lesson_Duration || "";
-      const minutes = parseInt(duration.split(" ")[0]) || 0;
-      return acc + minutes;
-    }, 0);
-    return `${totalMinutes} min`;
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return {
+      date: date.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      time: date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      }),
+    };
   };
 
   return (
@@ -223,7 +199,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
       {/* Features Section */}
       <section className="py-12 md:py-16 bg-neutral-100">
         <div className="container mx-auto px-4">
@@ -265,93 +240,8 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
       {/* Exam Courses Section */}
-      {isLoading ? (
-        <></>
-      ) : (
-        // <Loading />
-        <section className="py-12 md:py-16">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
-                  Popular Exam Courses
-                </h2>
-                <p className="text-neutral-600 mt-2">
-                  Choose from our highly-rated exam preparation courses
-                </p>
-              </div>
-              <Link
-                to="/courses"
-                className="inline-flex items-center px-4 py-2 bg-primary-50 text-primary-600 rounded-xl
-              hover:bg-primary-100 transition-colors duration-300 group"
-              >
-                View All Courses
-                <ChevronRight
-                  className="ml-2 transform group-hover:translate-x-1 transition-transform"
-                  size={18}
-                />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {courseList.map((course, index) => (
-                <div
-                  key={course.id}
-                  className="group bg-white rounded-xl overflow-hidden border border-neutral-200 shadow-card hover:shadow-card-hover hover:border-primary-200 transition-all duration-300 transform hover:-translate-y-1"
-                >
-                  <div
-                    className={`h-48 relative overflow-hidden ${getGradientClass(
-                      index
-                    )}`}
-                  >
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
-                    <img
-                      src={course.Course_Thumbnail}
-                      alt={course.Course_Title}
-                      className="w-full h-full object-cover absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-
-                  <div className="p-6">
-                    <h3 className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 transition-colors duration-300">
-                      {course.Course_Title}
-                    </h3>
-                    <div className="flex items-center text-sm text-neutral-600 mb-3">
-                      <Clock size={16} className="mr-2" />
-                      <span>{formatDuration(course.lessons)}</span>
-                      <span className="mx-2">•</span>
-                      <span>{course.Level?.name || "N/A"}</span>
-                    </div>
-
-                    <div className="flex items-center mb-4 pt-3 border-t border-neutral-100">
-                      <img
-                        src="https://media.istockphoto.com/id/1327592506/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=BpR0FVaEa5F24GIw7K8nMWiiGmbb8qmhfkpXcp1dhQg="
-                        alt="Instructor"
-                        className="w-8 h-8 rounded-full border-2 border-white shadow-soft"
-                      />
-                      <span className="text-sm text-neutral-600 ml-2">
-                        {course.Language?.name || "N/A"}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-col space-y-2">
-                      <Link
-                        to={`/course/${course.id}`}
-                        className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-medium"
-                      >
-                        View Details
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
+      <CourseList />
       {/* PTE Courses Section */}
       <section className="py-12 md:py-16 bg-neutral-100">
         <div className="container mx-auto px-4">
@@ -413,7 +303,7 @@ const HomePage = () => {
                   >
                     <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
                     <img
-                      src={`${course.image}`}
+                      src={`https://www.visasolutions4u.com/front_assets/images/icons/ielts-coaching.webp`}
                       alt={course.title}
                       className="w-full h-full object-cover absolute top-0 left-0 group-hover:scale-110 transition-transform duration-300"
                     />
@@ -446,7 +336,6 @@ const HomePage = () => {
           </Carousel>
         </div>
       </section>
-
       {/* Testimonials Section */}
       <TestimonialSection />
 
@@ -462,54 +351,67 @@ const HomePage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {upcomingWebinars.map((webinar, index) => (
-              <div
-                key={index}
-                className="group bg-white rounded-xl border border-neutral-200 overflow-hidden
-                shadow-card hover:shadow-card-hover hover:border-primary-200 
-                transition-all duration-300 transform hover:-translate-y-1"
-              >
-                <div className="p-6">
-                  <div className="bg-primary-50 rounded-lg p-3 mb-4 w-fit">
-                    <Clock size={24} className="text-primary-500" />
-                  </div>
-                  <h3
-                    className="font-semibold text-xl mb-3 text-neutral-800 group-hover:text-primary-600 
-                    transition-colors duration-300"
+          {/* Check if webinars exist */}
+          {Array.isArray(webinars) && webinars.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {webinars.slice(0, 3).map((webinar) => {
+                const { date, time } = formatDateTime(webinar.start_time);
+                const courseTitle = webinar.Course_Title || "N/A";
+
+                return (
+                  <div
+                    key={webinar.id}
+                    className="group bg-white rounded-xl border border-neutral-200 overflow-hidden
+                  shadow-card hover:shadow-card-hover hover:border-primary-200 
+                  transition-all duration-300 transform hover:-translate-y-1"
                   >
-                    {webinar.title}
-                  </h3>
-                  <p className="text-neutral-600 mb-4">
-                    <span className="font-medium">Instructor:</span>{" "}
-                    {webinar.instructor}
-                  </p>
-                  <div className="flex items-center text-sm text-neutral-600 mb-3">
-                    <Calendar size={16} className="mr-2" />
-                    <span>
-                      {new Date(webinar.date).toLocaleDateString("en-US", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </div>
-                  <div className="flex items-center text-sm text-neutral-600 mb-6">
-                    <Clock size={16} className="mr-2" />
-                    <span>{webinar.time}</span>
-                  </div>
-                  <button
-                    className="w-full bg-primary-600 text-white py-3 rounded-xl
+                    <div className="p-6">
+                      <div className="bg-primary-50 rounded-lg p-3 mb-4 w-fit">
+                        <Clock size={24} className="text-primary-500" />
+                      </div>
+                      <h3
+                        className="font-semibold text-xl mb-3 text-neutral-800 group-hover:text-primary-600 
+                    transition-colors duration-300"
+                      >
+                        {webinar.meeting_title}
+                      </h3>
+                      <p className="text-neutral-600 mb-4">
+                        <span className="font-medium">Course:</span>{" "}
+                        {courseTitle}
+                      </p>
+                      <div className="flex items-center text-sm text-neutral-600 mb-3">
+                        <Calendar size={16} className="mr-2" />
+                        <span>{date}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-neutral-600 mb-3">
+                        <Clock size={16} className="mr-2" />
+                        <span>
+                          {time} ({webinar.other_fields?.duration || "N/A"}{" "}
+                          minutes)
+                        </span>
+                      </div>
+                      <div className="text-sm text-neutral-600 mb-6">
+                        <span className="font-medium">Class Type:</span>{" "}
+                        {webinar.liveclasstype || "N/A"}
+                      </div>
+                      <button
+                        className="w-full bg-primary-600 text-white py-3 rounded-xl
                     hover:bg-primary-700 transition-colors duration-300 font-medium
                     shadow-soft hover:shadow-hover transform hover:-translate-y-0.5"
-                  >
-                    Register Now
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+                      >
+                        Join Webinar
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            // Fallback if no webinars available
+            <div className="text-center text-neutral-600">
+              No upcoming webinars at the moment. Please check back later.
+            </div>
+          )}
         </div>
       </section>
 
@@ -532,6 +434,7 @@ const HomePage = () => {
             StudyStreak.
           </p>
           <button
+            onClick={handlestartJourney}
             className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
             transform hover:-translate-y-0.5"
