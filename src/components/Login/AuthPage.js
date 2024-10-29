@@ -56,36 +56,6 @@ const AuthPage = () => {
             </div>
 
             {isLogin ? <LoginForm /> : <SignUpForm />}
-
-            <div className="mt-8">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-neutral-200"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-neutral-500">
-                    Or continue with
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <button
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 
-                    border border-neutral-300 rounded-xl hover:bg-neutral-50 
-                    transition-all duration-300 group"
-                >
-                  <img
-                    src="https://www.svgrepo.com/show/475656/google-color.svg"
-                    alt="Google"
-                    className="w-5 h-5"
-                  />
-                  <span className="text-sm font-medium text-neutral-700 group-hover:text-neutral-900">
-                    Continue with Google
-                  </span>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>

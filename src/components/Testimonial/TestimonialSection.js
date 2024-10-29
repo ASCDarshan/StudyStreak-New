@@ -9,8 +9,6 @@ const TestimonialSection = () => {
       score: "8.5",
       quote:
         "StudyStreak's approach to IELTS prep is revolutionary. The instructors break down complex topics into easily digestible pieces.",
-      image:
-        "https://media.istockphoto.com/id/1327592506/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=BpR0FVaEa5F24GIw7K8nMWiiGmbb8qmhfkpXcp1dhQg=",
     },
     {
       name: "Jane Smith",
@@ -107,7 +105,7 @@ const TestimonialSection = () => {
                 <div className="bg-white p-6 rounded-xl shadow-lg h-full flex flex-col">
                   <div className="flex items-center mb-4">
                     <img
-                      src={`${testimonial.image}`}
+                      src={`https://media.istockphoto.com/id/1327592506/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=BpR0FVaEa5F24GIw7K8nMWiiGmbb8qmhfkpXcp1dhQg=`}
                       alt={testimonial.name}
                       className="w-12 h-12 rounded-full border-2 border-purple-500 mr-4"
                     />

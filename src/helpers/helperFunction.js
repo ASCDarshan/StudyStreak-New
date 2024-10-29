@@ -1,5 +1,5 @@
-import store from "../components/store/authStore";
-import { authAction } from "../components/store/authStore";
+import store from "../store/authStore";
+import { authAction } from "../store/authStore";
 import ajaxCall from "./ajaxCall";
 
 Storage.prototype.setObject = (key, value) => {

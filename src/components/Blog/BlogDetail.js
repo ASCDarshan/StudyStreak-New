@@ -71,43 +71,45 @@ const BlogDetails = () => {
       </header>
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Article Header */}
-        <header className="mb-8">
-          <div className="flex items-center space-x-2 text-sm text-primary-600 mb-4">
-            <span className="font-medium">{blog.category}</span>
-          </div>
-          <h1 className="text-4xl font-bold text-neutral-800 mb-6">
-            {blog.title}
-          </h1>
-          <div className="flex items-center space-x-6 text-neutral-600">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center mr-3">
-                <User className="w-6 h-6 text-neutral-500" />
+        <div className="bg-white rounded-2xl shadow-card border border-neutral-200 p-8 mb-12">
+          <header className="mb-8">
+            <div className="flex items-center space-x-2 text-sm text-primary-600 mb-4">
+              <span className="font-medium">{blog.category}</span>
+            </div>
+            <h1 className="text-4xl font-bold text-neutral-800 mb-6">
+              {blog.title}
+            </h1>
+            <div className="flex items-center space-x-6 text-neutral-600">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center mr-3">
+                  <User className="w-6 h-6 text-neutral-500" />
+                </div>
+                <div>
+                  <p className="font-medium text-neutral-800">{blog.author}</p>
+                  <p className="text-sm">{blog.date}</p>
+                </div>
               </div>
-              <div>
-                <p className="font-medium text-neutral-800">{blog.author}</p>
-                <p className="text-sm">{blog.date}</p>
+              <div className="flex items-center">
+                <Clock className="w-5 h-5 mr-2" />
+                <span className="text-sm">{blog.readTime}</span>
               </div>
             </div>
-            <div className="flex items-center">
-              <Clock className="w-5 h-5 mr-2" />
-              <span className="text-sm">{blog.readTime}</span>
-            </div>
-          </div>
-        </header>
+          </header>
 
-        {/* Featured Image */}
-        <div className="rounded-2xl overflow-hidden mb-4">
-          <img
-            src={blog.image}
-            alt="Blog featured image"
-            className="w-full h-[300px] object-cover"
-          />
+          {/* Featured Image */}
+          <div className="rounded-2xl overflow-hidden mb-4">
+            <img
+              src={blog.image}
+              alt="Blog featured image"
+              className="w-full h-[300px] object-cover"
+            />
+          </div>
+
+          {/* Article Content */}
+          <article className="prose max-w-none mb-4">
+            <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+          </article>
         </div>
-
-        {/* Article Content */}
-        <article className="prose max-w-none mb-4">
-          <div dangerouslySetInnerHTML={{ __html: blog.content }} />
-        </article>
       </main>
     </div>
   );

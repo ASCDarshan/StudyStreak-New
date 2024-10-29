@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Clock,
   Star,
@@ -13,6 +13,7 @@ import EnglishTest from "../EnglishTest/EnglishTest";
 
 const IELTSPage = () => {
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const navigate = useNavigate();
 
   // IELTS-specific courses data
   const ieltsModules = ["All", "Listening", "Reading", "Writing", "Speaking"];
@@ -110,6 +111,13 @@ const IELTSPage = () => {
     },
   ];
 
+  const handleTakeTest = () => {
+    navigate("/english-test");
+  };
+  const handleCourse = () => {
+    navigate("/courses");
+  };
+
   return (
     <div className="bg-neutral-50 min-h-screen">
       {/* Hero Section */}
@@ -161,6 +169,7 @@ const IELTSPage = () => {
 
               <div className="flex gap-4 pt-4">
                 <button
+                  onClick={handleCourse}
                   className="bg-white text-primary-600 px-6 py-3 rounded-xl 
                   hover:bg-primary-50 transition-all duration-300 font-medium"
                 >
@@ -169,6 +178,7 @@ const IELTSPage = () => {
                 <button
                   className="bg-primary-700 text-white px-6 py-3 rounded-xl 
                   hover:bg-primary-800 transition-all duration-300 font-medium border border-primary-500"
+                  onClick={handleTakeTest}
                 >
                   Take Free Test
                 </button>
