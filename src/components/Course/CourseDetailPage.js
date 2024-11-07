@@ -10,7 +10,6 @@ import {
   Globe,
   BookOpen,
   GraduationCap,
-  CheckCircle,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";

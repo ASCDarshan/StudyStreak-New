@@ -62,12 +62,12 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
   return (
     <section className="py-8 md:py-12">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
               Popular Exam Courses
             </h2>
-            <p className="text-neutral-600 mt-2">
+            <p className="text-neutral-800">
               Choose from our highly-rated exam preparation courses
             </p>
           </div>
@@ -97,7 +97,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
                   <h3 className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 transition-colors duration-300">
                     {course.Course_Title}
                   </h3>
-                  <div className="flex items-center text-sm text-neutral-600 mb-3">
+                  <div className="flex items-center text-sm text-neutral-800 mb-3">
                     <Clock size={16} className="mr-2" />
                     <span>{calculateTotalDuration(course.lessons)}</span>
                     <span className="mx-2">•</span>
@@ -105,11 +105,11 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
                   </div>
 
                   <div className="flex items-center mb-4 pt-3 border-t border-neutral-100">
-                    <span className="text-sm text-neutral-600 ml-2">
+                    <span className="text-sm text-neutral-800 ml-2">
                       Valid Up To:{" "}
                       {moment(course?.EnrollmentEndDate).format("ll")}
                     </span>
-                    <span className="text-sm text-neutral-600 ml-2">
+                    <span className="text-sm text-neutral-800 ml-2">
                       Language: {course.Language?.name || "N/A"}
                     </span>
                   </div>
@@ -128,7 +128,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-lg text-neutral-600">
+            <p className="text-lg text-neutral-800">
               No courses available for {selectedCategory || "selected category"}
             </p>
           </div>

@@ -17,11 +17,13 @@ import BlogDetails from "./components/Blog/BlogDetail";
 import IeltsCourseDetail from "./components/Ielts/IeltsCourseDetails";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ScrollToTop from "./components/UI/ScrollToTop";
 
 function App() {
   return (
     <Layout>
       <ToastContainer theme="colored" position="top-center" autoClose={3000} />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/courses" element={<CoursesPage />} />

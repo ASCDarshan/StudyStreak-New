@@ -17,6 +17,7 @@ import TestimonialSection from "./Testimonial/TestimonialSection";
 import { Link, useNavigate } from "react-router-dom";
 import CourseList from "./Course/CourseList";
 import ajaxCall from "../helpers/ajaxCall";
+import Packages from "./Packages/Packages";
 
 const HomePage = () => {
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
@@ -38,7 +39,7 @@ const HomePage = () => {
       iconColor: "text-primary-500",
     },
     {
-      title: "Expert Instruction",
+      title: "Expert Instructor",
       description: "Learn from certified professionals",
       icon: GraduationCap,
       iconBgColor: "bg-secondary-50",
@@ -166,7 +167,7 @@ const HomePage = () => {
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="w-full md:w-1/2 space-y-6">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                Achieve your dream of overseas Education with ESPI.
+                Achieve your dream of overseas Education with StudyStreak.
               </h1>
               <p className="text-primary-100 text-lg">
                 Focuses courses to develop your potential to score high.
@@ -177,13 +178,33 @@ const HomePage = () => {
                   className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
                   shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                 >
-                  Explore Courses
+                  IELTS
                 </button>
                 <button
                   className="bg-primary-700 hover:bg-primary-800 text-white px-6 py-3 rounded-xl 
                   border border-primary-500 hover:border-primary-600 transition-all duration-300"
                 >
-                  Free Practice Test
+                  PTE
+                </button>
+                <button
+                  onClick={handleExplorecourses}
+                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  TOEFL
+                </button>
+                <button
+                  className="bg-primary-700 hover:bg-primary-800 text-white px-6 py-3 rounded-xl 
+                  border border-primary-500 hover:border-primary-600 transition-all duration-300"
+                >
+                  GMAT
+                </button>
+                <button
+                  onClick={handleExplorecourses}
+                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  GRE
                 </button>
               </div>
             </div>
@@ -229,7 +250,7 @@ const HomePage = () => {
                       >
                         {feature.title}
                       </h3>
-                      <p className="text-neutral-600 mt-2">
+                      <p className="text-neutral-800 mt-2">
                         {feature.description}
                       </p>
                     </div>
@@ -250,7 +271,7 @@ const HomePage = () => {
               <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
                 PTE Academic Courses
               </h2>
-              <p className="text-neutral-600 mt-2">
+              <p className="text-neutral-800 mt-2">
                 Specialized courses for PTE success
               </p>
             </div>
@@ -261,7 +282,7 @@ const HomePage = () => {
               >
                 <ChevronLeft
                   size={20}
-                  className="text-neutral-600 group-hover:text-primary-600"
+                  className="text-neutral-800 group-hover:text-primary-600"
                 />
               </button>
               <button
@@ -270,7 +291,7 @@ const HomePage = () => {
               >
                 <ChevronRight
                   size={20}
-                  className="text-neutral-600 group-hover:text-primary-600"
+                  className="text-neutral-800 group-hover:text-primary-600"
                 />
               </button>
             </div>
@@ -316,7 +337,7 @@ const HomePage = () => {
                     >
                       {course.title}
                     </h3>
-                    <div className="flex items-center text-sm text-neutral-600 mb-4">
+                    <div className="flex items-center text-sm text-neutral-800 mb-4">
                       <Clock size={16} className="mr-2" />
                       <span>{course.duration}</span>
                       <span className="mx-2">•</span>
@@ -338,6 +359,7 @@ const HomePage = () => {
       </section>
       {/* Testimonials Section */}
       <TestimonialSection />
+      <Packages />
 
       {/* Webinars Section */}
       <section className="py-12 md:py-16">
@@ -346,7 +368,7 @@ const HomePage = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 mb-3">
               Upcoming Free Webinars
             </h2>
-            <p className="text-neutral-600">
+            <p className="text-neutral-800">
               Join our expert instructors for free learning sessions
             </p>
           </div>
@@ -375,22 +397,22 @@ const HomePage = () => {
                       >
                         {webinar.meeting_title}
                       </h3>
-                      <p className="text-neutral-600 mb-4">
+                      <p className="text-neutral-800 mb-4">
                         <span className="font-medium">Course:</span>{" "}
                         {courseTitle}
                       </p>
-                      <div className="flex items-center text-sm text-neutral-600 mb-3">
+                      <div className="flex items-center text-sm text-neutral-800 mb-3">
                         <Calendar size={16} className="mr-2" />
                         <span>{date}</span>
                       </div>
-                      <div className="flex items-center text-sm text-neutral-600 mb-3">
+                      <div className="flex items-center text-sm text-neutral-800 mb-3">
                         <Clock size={16} className="mr-2" />
                         <span>
                           {time} ({webinar.other_fields?.duration || "N/A"}{" "}
                           minutes)
                         </span>
                       </div>
-                      <div className="text-sm text-neutral-600 mb-6">
+                      <div className="text-sm text-neutral-800 mb-6">
                         <span className="font-medium">Class Type:</span>{" "}
                         {webinar.liveclasstype || "N/A"}
                       </div>
@@ -408,7 +430,7 @@ const HomePage = () => {
             </div>
           ) : (
             // Fallback if no webinars available
-            <div className="text-center text-neutral-600">
+            <div className="text-center text-neutral-800">
               No upcoming webinars at the moment. Please check back later.
             </div>
           )}

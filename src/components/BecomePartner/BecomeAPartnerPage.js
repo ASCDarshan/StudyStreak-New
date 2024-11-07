@@ -12,9 +12,17 @@ import {
   School,
   Target,
   X,
-  ChevronDown,
+  Send,
   ChevronUp,
+  ChevronDown,
 } from "lucide-react";
+
+const purposes = [
+  "Be a Counselor",
+  "Be an IELTS, PTE, or TOEFL Faculty",
+  " Be a Study Abroad Consultant",
+  "Be a StudyStreak Partner",
+];
 
 const BecomeAPartnerPage = () => {
   const [formData, setFormData] = useState({
@@ -36,6 +44,7 @@ const BecomeAPartnerPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
 
   const faqs = [
     {
@@ -464,6 +473,7 @@ const BecomeAPartnerPage = () => {
       </div>
     </div>
   );
+
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Hero Section */}
@@ -663,59 +673,119 @@ const BecomeAPartnerPage = () => {
         </div>
       </section>
 
-      {/* Floating Form */}
-      <FloatingForm />
-
-      {/* Modified CTA buttons to open the floating form */}
-      <button
-        onClick={() => setIsFormOpen(true)}
-        className="fixed bottom-8 right-8 bg-primary-600 text-white px-8 py-3 rounded-xl
-          font-medium hover:bg-primary-700 transition-all duration-300 shadow-elevated
-          hover:shadow-hover transform hover:-translate-y-0.5 flex items-center gap-2 z-40"
-      >
-        Apply Now
-        <ArrowRight size={18} />
-      </button>
-
-      {/* FAQ Section */}
-      {/* <section className="bg-neutral-100 py-16">
+      {/* Contact Form */}
+      <div className="container mx-auto px-4 py-4">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-neutral-800 mb-8 text-center">
-              Frequently Asked Questions
+          <div className="bg-white rounded-2xl shadow-card p-8">
+            <h2 className="text-2xl font-bold text-neutral-800 mb-6">
+              Become a Partner
             </h2>
-            
-            <div className="space-y-4">
-              {[
-                {
-                  q: "What are the requirements to become a partner?",
-                  a: "Partners should be registered educational institutions, test preparation centers, or licensed educational consultants with a proven track record in the education sector."
-                },
-                {
-                  q: "How long does the application process take?",
-                  a: "The typical application review process takes 5-7 business days. Once approved, we'll schedule an onboarding call to get you started."
-                },
-                {
-                  q: "What support do partners receive?",
-                  a: "Partners receive comprehensive support including training, marketing materials, technical support, and a dedicated partnership manager."
-                },
-                {
-                  q: "How is the revenue sharing structured?",
-                  a: "We offer competitive commission rates based on the partnership model and volume of enrollments. Specific details are discussed during the partnership discussion."
-                }
-              ].map((faq, index) => (
-                <div 
-                  key={index}
-                  className="bg-white rounded-xl p-6 shadow-card"
-                >
-                  <h3 className="text-lg font-semibold text-neutral-800 mb-2">{faq.q}</h3>
-                  <p className="text-neutral-600">{faq.a}</p>
+            <form onSubmit={handleSubmit} className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-neutral-700">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 rounded-xl border border-neutral-300
+                        focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  />
                 </div>
-              ))}
-            </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-neutral-700">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 rounded-xl border border-neutral-300
+                        focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-neutral-700">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 rounded-xl border border-neutral-300
+                        focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-neutral-700">
+                    Purpose
+                  </label>
+                  <select
+                    name="purpose"
+                    value={formData.purpose}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2.5 rounded-xl border border-neutral-300
+                        focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  >
+                    {purposes.map((purpose) => (
+                      <option key={purpose} value={purpose.toLowerCase()}>
+                        {purpose}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-neutral-700">
+                  Your Message
+                </label>
+                <textarea
+                  name="message"
+                  required
+                  rows={4}
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2.5 rounded-xl border border-neutral-300
+                      focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-primary-600 text-white py-3 rounded-xl
+                    hover:bg-primary-700 transition-all duration-300 font-medium
+                    flex items-center justify-center gap-2"
+              >
+                {submitted ? (
+                  <>
+                    Message Sent
+                    <CheckCircle size={18} />
+                  </>
+                ) : (
+                  <>
+                    Send Message
+                    <Send size={18} />
+                  </>
+                )}
+              </button>
+            </form>
           </div>
         </div>
-      </section> */}
+      </div>
+
+      {/* Floating Form */}
+      <FloatingForm />
 
       {/* Contact CTA */}
       <section className="py-16">

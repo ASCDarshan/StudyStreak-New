@@ -1,7 +1,7 @@
 import { CheckCircle } from "lucide-react";
 import React, { useState } from "react";
 
-const PackageDetails = ({ courseType, courseId, packages, courseName }) => {
+const PackageDetails = ({ packages }) => {
   const [selectedPackage, setSelectedPackage] = useState(null);
 
   return (
