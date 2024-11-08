@@ -16,6 +16,7 @@ const packagesDetails = [
       "60+ hours video lessons",
       "Free",
     ],
+    badge: "Orientation",
   },
   {
     package_name: "Master Class",
@@ -32,9 +33,10 @@ const packagesDetails = [
       "English/Gujarati/Hindi",
       "Free",
     ],
+    badge: "Study Abroad Counseling",
   },
   {
-    package_name: "study abroad counselling",
+    package_name: "Study Abroad Counselling",
     image:
       "https://ieltsonlinetests.com/sites/default/files/styles/webinar_375x215/public/2020-11/shutterstock_583424317.jpg",
     additional_options: ["IELTS Master Class"],
@@ -48,6 +50,7 @@ const packagesDetails = [
       "English/Gujarati/Hindi",
       "Free",
     ],
+    badge: "Orientation",
   },
 ];
 
@@ -101,16 +104,25 @@ const Packages = () => {
         {packagesDetails.map((pkg, index) => (
           <div
             key={index}
-            className="w-96 bg-white border border-neutral-200 rounded-xl shadow-soft p-6 hover:shadow-hover transition-shadow duration-300"
+            className="w-96 bg-white border border-neutral-200 rounded-xl shadow-soft p-6 hover:shadow-hover transition-shadow duration-300 relative"
           >
+            {/* Badge / Title */}
+            {pkg.badge && (
+              <div className="absolute top-4 left-4 bg-primary-600 text-white py-1 px-3 rounded-full text-sm font-medium">
+                {pkg.badge}
+              </div>
+            )}
+
             <img
               src={pkg.image}
               alt={pkg.package_name}
               className="rounded-t-xl mb-4"
             />
+
             <h3 className="text-2xl font-semibold mb-4 text-primary-600">
               {pkg.package_name}
             </h3>
+
             <ul className="space-y-3 mb-6">
               {pkg.features.map((feature, i) => (
                 <li
@@ -133,6 +145,8 @@ const Packages = () => {
                 </li>
               ))}
             </ul>
+
+            {/* Join Button */}
             <button
               onClick={() => handleJoinClick(pkg.package_name)}
               className="bg-primary-600 hover:bg-primary-700 text-white py-2 px-6 w-full rounded-full font-medium transition-colors duration-300"

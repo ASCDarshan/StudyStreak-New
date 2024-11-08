@@ -79,7 +79,7 @@ const TalkToUsPage = () => {
     {
       city: "Vadodara",
       address:
-        "1st and 2nd Floor, Galav Chambers, Dairy Den Circle, Sayajigunj, Vadodara, Gujarat, India - 390020",
+        "2nd Floor, Galav Chamber, Sarod, Sayajiganj, Vadodara, Gujarat 390001",
       phone: "+91-8849650924",
       email: "reachus@studystreak.io",
       timing: "Mon-Sat: 9:00 AM - 6:00 PM",
@@ -353,7 +353,7 @@ const TalkToUsPage = () => {
           <div className="bg-white rounded-2xl overflow-hidden h-60 shadow-card">
             <div className="w-full h-full bg-neutral-200 flex items-center justify-center">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3691.178103895951!2d73.184352!3d22.309103!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fcf528ca0b7af%3A0xe8357fb32b2b0e91!2sESPI%20Visa%20Consultant%20Pvt.%20Ltd%20Vadodara!5e0!3m2!1sen!2sin!4v1729833370272!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.17810971985!2d73.18177667529274!3d22.309102779680206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fcf9cf5fbe219%3A0x6841efede2821871!2sStudy%20Streak%20%7C%20IELTS%20TOEFL%20PTE%20%26%20Spoken%20English%20Online%20Coaching%20Classes%20%7C%20Study%20Abroad%20%26%20Student%20Visa%20Consultants!5e0!3m2!1sen!2sin!4v1731040596525!5m2!1sen!2sin"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
