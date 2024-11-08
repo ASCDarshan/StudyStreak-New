@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
             <div className="flex justify-between items-center text-sm">
               <div className="flex items-center gap-4">
                 <span>📧 reachus@studystreak.io</span>
-                <span>📞 +91 91069 95326</span>
+                <span>📞 +91 88496 50924</span>
               </div>
               <div className="hidden md:flex items-center gap-4">
                 <Link
@@ -99,7 +99,7 @@ const Layout = ({ children }) => {
               <div className="hidden lg:flex items-center gap-3">
                 {/* Free Practice Test Button */}
                 <Link
-                  // to="/free-practice-test"
+                  to="/login"
                   className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-xl 
                 hover:bg-blue-600 transition-all duration-300 text-sm font-medium"
                 >
@@ -108,7 +108,7 @@ const Layout = ({ children }) => {
 
                 {/* Free Diagnostic Test Button */}
                 <Link
-                  // to="/free-diagnostic-test"
+                  to="/login"
                   className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-xl 
                 hover:bg-green-600 transition-all duration-300 text-sm font-medium"
                 >

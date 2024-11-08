@@ -1,4 +1,4 @@
-import { CheckCircle } from "lucide-react";
+import { BookOpen, CheckCircle } from "lucide-react";
 import React, { useState } from "react";
 
 const PackageDetails = ({ packages }) => {
@@ -55,6 +55,12 @@ const PackageDetails = ({ packages }) => {
                     Free Practice Test
                   </div>
                 )}
+                {pkg.lessons && (
+                  <div className="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
+                    <BookOpen size={14} />
+                    Interactive Lessons
+                  </div>
+                )}
               </div>
             </div>
 
@@ -63,42 +69,61 @@ const PackageDetails = ({ packages }) => {
               {[
                 {
                   label: "Counselling",
-                  count: pkg.counselling_count,
+                  count:
+                    pkg.counselling_count !== -1 ? pkg.counselling_count : null,
                   enabled: pkg.counselling,
                 },
                 {
                   label: "Group Doubt Solving",
-                  count: pkg.group_doubt_solving_count,
+                  count:
+                    pkg.group_doubt_solving_count !== -1
+                      ? pkg.group_doubt_solving_count
+                      : null,
                   enabled: pkg.group_doubt_solving,
                 },
                 {
                   label: "One-to-One Doubt Solving",
-                  count: pkg.one_to_one_doubt_solving_count,
+                  count:
+                    pkg.one_to_one_doubt_solving_count !== -1
+                      ? pkg.one_to_one_doubt_solving_count
+                      : null,
                   enabled: pkg.one_to_one_doubt_solving,
                 },
                 {
                   label: "Practice Test",
-                  count: pkg.practice_test_count,
+                  count:
+                    pkg.practice_test_count !== -1
+                      ? pkg.practice_test_count
+                      : null,
                   enabled: pkg.practice_test,
                 },
                 {
                   label: "Writing Evaluation",
-                  count: pkg.writing_evaluation_count,
+                  count:
+                    pkg.writing_evaluation_count !== -1
+                      ? pkg.writing_evaluation_count
+                      : null,
                   enabled: pkg.writing_evaluation,
                 },
                 {
                   label: "Speaking Practice",
-                  count: pkg.speaking_practice_count,
+                  count:
+                    pkg.speaking_practice_count !== -1
+                      ? pkg.speaking_practice_count
+                      : null,
                   enabled: pkg.speaking_practice,
                 },
                 {
                   label: "Webinar",
-                  count: pkg.webinar_count,
+                  count: pkg.webinar_count !== -1 ? pkg.webinar_count : null,
                   enabled: pkg.webinar,
                 },
                 {
                   label: "Tutor Support",
-                  count: pkg.tutor_support_count,
+                  count:
+                    pkg.tutor_support_count !== -1
+                      ? pkg.tutor_support_count
+                      : null,
                   enabled: pkg.tutor_support,
                 },
               ].map(

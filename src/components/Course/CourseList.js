@@ -67,7 +67,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
             <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
               Popular Exam Courses
             </h2>
-            <p className="text-neutral-800">
+            <p className="text-neutral-800 mt-2 mb-3">
               Choose from our highly-rated exam preparation courses
             </p>
           </div>
@@ -120,6 +120,20 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
                       className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-medium"
                     >
                       View Details
+                    </Link>
+                  </div>
+                  <div className="flex mt-2 gap-2">
+                    <Link
+                      to="/login"
+                      className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-small"
+                    >
+                      Free Practice Test
+                    </Link>
+                    <Link
+                      to="/login"
+                      className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-small"
+                    >
+                      Free Diagnostic Test
                     </Link>
                   </div>
                 </div>
