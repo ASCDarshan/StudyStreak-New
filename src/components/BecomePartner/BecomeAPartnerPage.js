@@ -37,20 +37,6 @@ const BecomeAPartnerPage = () => {
 
   const partnerTypes = [
     {
-      title: "IELTS Master Class - 7-Point Strategy",
-      icon: <BookOpen className="w-8 h-8" />,
-      features: [
-        "Listening Strategy: Accents, prediction, key-info",
-        "Reading Strategy: Skimming, scanning, timing",
-        "Writing Strategy: Structure, vocabulary, cohesion",
-        "Speaking Strategy: Fluency, pronunciation, responses",
-        "Mock Test Insights: Timed, practice, evaluation",
-        "Personalized Feedback: Targeted, improvement-focused",
-        "Live Classes: Interactive, expert-led, immediate",
-        "Free: Join for free",
-      ],
-    },
-    {
       title: "Be a Counselor",
       icon: <Users className="w-8 h-8" />,
       features: [
@@ -161,45 +147,6 @@ const BecomeAPartnerPage = () => {
     console.log(formData);
   };
 
-  // const partnerTypes = [
-  //   {
-  //     title: "Educational Institutions",
-  //     icon: <School size={32} />,
-  //     description:
-  //       "Universities, colleges, and training centers looking to expand their test preparation offerings.",
-  //     features: [
-  //       "Integrate our courses into your curriculum",
-  //       "Access branded learning materials",
-  //       "Dedicated support team",
-  //       "Custom pricing models",
-  //     ],
-  //   },
-  //   {
-  //     title: "Test Preparation Centers",
-  //     icon: <Target size={32} />,
-  //     description:
-  //       "Established test prep centers wanting to enhance their program portfolio.",
-  //     features: [
-  //       "Comprehensive study materials",
-  //       "Teacher training programs",
-  //       "Performance tracking tools",
-  //       "Marketing support",
-  //     ],
-  //   },
-  //   {
-  //     title: "Educational Consultants",
-  //     icon: <Handshake size={32} />,
-  //     description:
-  //       "Independent consultants and agencies helping students with overseas education.",
-  //     features: [
-  //       "Flexible partnership models",
-  //       "Commission-based structure",
-  //       "Lead generation support",
-  //       "Regular product updates",
-  //     ],
-  //   },
-  // ];
-
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Hero Section */}
@@ -290,7 +237,7 @@ const BecomeAPartnerPage = () => {
       </section>
 
       {/* Partnership Types */}
-      <section className="bg-neutral-100 py-8">
+      <section className="bg-neutral-100 py-4">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl font-bold text-neutral-800 mb-4">
@@ -302,7 +249,7 @@ const BecomeAPartnerPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {partnerTypes.map((type, index) => (
               <div
                 key={index}
@@ -311,11 +258,11 @@ const BecomeAPartnerPage = () => {
               >
                 <div
                   className="bg-primary-100 w-16 h-16 rounded-xl flex items-center justify-center
-                  text-primary-600 mb-6"
+                  text-primary-600 mb-4"
                 >
                   {type.icon}
                 </div>
-                <h3 className="text-xl font-bold text-neutral-800 mb-3">
+                <h3 className="text-xl font-bold text-neutral-800 mb-2">
                   {type.title}
                 </h3>
                 <p className="text-neutral-600 mb-6">{type.description}</p>
