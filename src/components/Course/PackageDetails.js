@@ -49,16 +49,14 @@ const PackageDetails = ({ packages }) => {
                     Live Classes Available
                   </div>
                 )}
+                <div className="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
+                  <BookOpen size={14} />
+                  Interactive Lessons
+                </div>
                 {pkg.practice_test && (
                   <div className="inline-flex items-center gap-1.5 bg-info-100 text-info-700 px-3 py-1 rounded-full text-sm font-medium">
                     <CheckCircle size={14} />
                     Free Practice Test
-                  </div>
-                )}
-                {pkg.lessons && (
-                  <div className="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
-                    <BookOpen size={14} />
-                    Interactive Lessons
                   </div>
                 )}
               </div>

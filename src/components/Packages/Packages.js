@@ -22,7 +22,8 @@ const packagesDetails = [
     package_name: "Master Class",
     image:
       "https://ieltsonlinetests.com/sites/default/files/styles/webinar_375x215/public/2020-10/charts-data-desk-669615.jpg",
-    country_options: ["UK", "NZ", "USA", "Canada", "Australia", "Europe"],
+    additional_options: ["IELTS Master Class"],
+
     features: [
       "Eligibility Assessment",
       "Admission Process",
@@ -39,7 +40,8 @@ const packagesDetails = [
     package_name: "Study Abroad Counselling",
     image:
       "https://ieltsonlinetests.com/sites/default/files/styles/webinar_375x215/public/2020-11/shutterstock_583424317.jpg",
-    additional_options: ["IELTS Master Class"],
+    country_options: ["UK", "NZ", "USA", "Canada", "Australia", "Europe"],
+
     features: [
       "Eligibility Assessment",
       "Admission Process",
@@ -231,26 +233,6 @@ const Packages = () => {
                 {selectedPackage === "Master Class" && (
                   <div className="mb-6">
                     <label className="block text-neutral-700 font-medium mb-2">
-                      Country
-                    </label>
-                    <select
-                      name="country"
-                      value={formData.country}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    >
-                      <option value="">Select Country</option>
-                      {packagesDetails[1].country_options.map((option, i) => (
-                        <option key={i} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-                {selectedPackage === "study abroad counselling" && (
-                  <div className="mb-6">
-                    <label className="block text-neutral-700 font-medium mb-2">
                       Additional Options
                     </label>
                     <select
@@ -260,13 +242,33 @@ const Packages = () => {
                       className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     >
                       <option value="">Select Additional Option</option>
-                      {packagesDetails[2].additional_options.map(
+                      {packagesDetails[1].additional_options.map(
                         (option, i) => (
                           <option key={i} value={option}>
                             {option}
                           </option>
                         )
                       )}
+                    </select>
+                  </div>
+                )}
+                {selectedPackage === "Study Abroad Counselling" && (
+                  <div className="mb-6">
+                    <label className="block text-neutral-700 font-medium mb-2">
+                      Country
+                    </label>
+                    <select
+                      name="country"
+                      value={formData.country}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    >
+                      <option value="">Select Country</option>
+                      {packagesDetails[2].country_options.map((option, i) => (
+                        <option key={i} value={option}>
+                          {option}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 )}
