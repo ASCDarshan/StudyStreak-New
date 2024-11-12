@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Clock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import moment from "moment/moment";
 
 const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
+  const location = useLocation();
+  // Use `selectedCategory` prop if provided; fallback to `location.state`
+  const category = selectedCategory || location.state?.category || "";
   const [courseList, setCouresList] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/courselistview/?search=${searchTerm}&Category__name=${selectedCategory}`,
+          `/courselistview/?search=${searchTerm}&Category__name=${category}`,
           {
             headers: {
               Accept: "application/json",
@@ -31,7 +34,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
         console.log("error", error);
       }
     })();
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, category]);
 
   const getGradientClass = (index) => {
     const gradients = [
@@ -142,8 +145,11 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-lg text-neutral-800">
-              No courses available for {selectedCategory || "selected category"}
+            <p className="text-lg font-semibold text-red-600">
+              Courses Coming Soon for{" "}
+              <span className="italic text-red-700">
+                {selectedCategory || "selected category"}
+              </span>
             </p>
           </div>
         )}

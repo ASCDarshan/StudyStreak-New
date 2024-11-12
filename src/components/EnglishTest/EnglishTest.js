@@ -617,7 +617,7 @@ const EnglishTest = () => {
                       Try Again
                     </button>
                     <Link
-                      to="/courses/ielts"
+                      to="/courses"
                       className="px-6 py-2.5 rounded-xl bg-primary-600 text-white 
                         hover:bg-primary-700 transition-all duration-300"
                     >
