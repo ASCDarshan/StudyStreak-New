@@ -22,9 +22,6 @@ import Packages from "./Packages/Packages";
 const HomePage = () => {
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
   const navigate = useNavigate();
-  const handleExplorecourses = () => {
-    navigate("/courses");
-  };
 
   const handlestartJourney = () => {
     navigate("/login");
@@ -151,6 +148,10 @@ const HomePage = () => {
     };
   };
 
+  const handleCategory = (category) => {
+    navigate("/courses", { state: { category } });
+  };
+
   return (
     <div className="bg-neutral-50 min-h-screen">
       {/* Hero Section */}
@@ -174,37 +175,53 @@ const HomePage = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
-                  onClick={handleExplorecourses}
+                  onClick={() => handleCategory("IELTS")}
                   className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
                   shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                 >
                   IELTS
                 </button>
                 <button
-                  className="bg-primary-700 hover:bg-primary-800 text-white px-6 py-3 rounded-xl 
-                  border border-primary-500 hover:border-primary-600 transition-all duration-300"
+                  onClick={() => handleCategory("PTE")}
+                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                 >
                   PTE
                 </button>
                 <button
-                  onClick={handleExplorecourses}
+                  onClick={() => handleCategory("TOEFL")}
                   className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
                   shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                 >
                   TOEFL
                 </button>
                 <button
-                  className="bg-primary-700 hover:bg-primary-800 text-white px-6 py-3 rounded-xl 
-                  border border-primary-500 hover:border-primary-600 transition-all duration-300"
+                  onClick={() => handleCategory("GMAT")}
+                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                 >
                   GMAT
                 </button>
                 <button
-                  onClick={handleExplorecourses}
+                  onClick={() => handleCategory("GRE")}
                   className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
                   shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                 >
                   GRE
+                </button>
+                <button
+                  onClick={() => handleCategory("SAT")}
+                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  SAT
+                </button>
+                <button
+                  onClick={() => handleCategory("GENERAL")}
+                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  GENERAL
                 </button>
               </div>
             </div>
@@ -309,8 +326,8 @@ const HomePage = () => {
                 <div
                   key={index}
                   className="group bg-white rounded-xl overflow-hidden border border-neutral-200 
-                  shadow-card hover:shadow-card-hover hover:border-primary-200 
-                  transition-all duration-300 transform hover:-translate-y-1"
+                    shadow-card hover:shadow-card-hover hover:border-primary-200 
+                    transition-all duration-300 transform hover:-translate-y-1"
                 >
                   <div
                     className={`h-48 relative overflow-hidden ${
@@ -333,7 +350,7 @@ const HomePage = () => {
                   <div className="p-6">
                     <h3
                       className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 
-                      transition-colors duration-300"
+                        transition-colors duration-300"
                     >
                       {course.title}
                     </h3>
@@ -346,7 +363,7 @@ const HomePage = () => {
                     <Link
                       to={`/course/${course.id}`}
                       className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl
-                      hover:bg-primary-100 transition-colors duration-300 font-medium"
+                        hover:bg-primary-100 transition-colors duration-300 font-medium"
                     >
                       View Details
                     </Link>
@@ -374,6 +391,7 @@ const HomePage = () => {
       </section>
       {/* Testimonials Section */}
       <TestimonialSection />
+
       <Packages />
 
       {/* Webinars Section */}
